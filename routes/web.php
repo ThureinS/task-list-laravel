@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 
 class Task
@@ -54,13 +55,24 @@ $tasks = [
     ),
 ];
 
+Route::get('/', function () {
+    return redirect()->route('task.index');
+});
 
-Route::get('/', function () use ($tasks) {
+Route::get('/tasks', function () use ($tasks) {
     return view('index', [
         'tasks' => $tasks
     ]);
 })->name('task.index');
 
-Route::get('/{id}', function () {
-    return 'one single task';
+Route::get('/tasks/{id}', function ($id) use ($tasks) {
+    $task = collect($tasks)->firstWhere('id', $id);
+
+    if (!$task) {
+        abort(Response::HTTP_NOT_FOUND);
+    }
+
+    return view('show', [
+        'task' => $task
+    ]);
 })->name('task.show');

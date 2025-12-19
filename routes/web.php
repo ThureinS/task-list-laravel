@@ -11,11 +11,11 @@ Route::get('/', function () {
 
 Route::get('/tasks', function () {
     return view('index', [
-        'tasks' => Task::latest()->paginate()
+        'tasks' => Task::latest()->paginate(5)
     ]);
 })->name('task.index');
 
-Route::view('/tasks/create', 'create');
+Route::view('/tasks/create', 'create')->name('task.create');
 
 Route::get('/tasks/{task}', function (Task $task) {
     return view('show', [
@@ -48,3 +48,10 @@ Route::delete('/tasks/{task}', function (Task $task) {
     return redirect()->route('task.index')
         ->with('success', 'Task deleted successfully!');
 })->name('task.destroy');
+
+Route::put('/tasks/{task}/toggle-complete', function (Task $task) {
+    $task->toggleComplete();
+
+    return redirect()->back()
+        ->with('success', 'Task status updated successfully!');
+})->name('task.toggle-complete');

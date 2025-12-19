@@ -3,6 +3,7 @@
 
 <head>
     <title>Task List App</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     @yield('style')
 </head>
 

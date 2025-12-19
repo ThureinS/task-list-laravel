@@ -3,25 +3,40 @@
 @section('title', $task->title)
 
 @section('content')
-    <p>{{ $task->description }}</p>
-    <p>{{ $task->long_description ?? '' }}</p>
-    <p>{{ $task->completed }}</p>
-    <p>{{ $task->created_at }}</p>
-    <p>{{ $task->updated_at }}</p>
+    <div>
+        <a href="{{ route('task.index') }}" class="link">⏪ Back to Task
+            List</a>
+    </div>
 
-    <a href="{{ route('task.edit', ['task' => $task]) }}">Edit</a>
+    <p class="mb-4 text-slate-700">{{ $task->description }}</p>
 
-    <p>{{ $task->completed ? 'Completed' : 'Incomplete' }}</p>
+    <p class="mb-4 text-slate-700">{{ $task->long_description ?? '' }}</p>
 
-    <form action="{{ route('task.toggle-complete', ['task' => $task->id]) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <button type="submit">{{ $task->completed ? 'Mark Incomplete' : 'Mark Complete' }}</button>
-    </form>
+    <p class="mb-4 text-sm text-slate-500">Created {{ $task->created_at->diffForHumans() }} . Updated
+        {{ $task->updated_at->diffForHumans() }}</p>
 
-    <form action="{{ route('task.destroy', ['task' => $task->id]) }}" method="POST">
-        @csrf
-        @method('DELETE')
-        <button type="submit">Delete</button>
-    </form>
+    <p class="mb-4">
+        @if ($task->completed)
+            <span class="font-medium text-green-500">Completed</span>
+        @else
+            <span class="font-medium text-red-500">Incomplete</span>
+        @endif
+    </p>
+
+    <div class="flex gap-2">
+        <a href="{{ route('task.edit', ['task' => $task]) }}" class="btn">Edit</a>
+
+        <form action="{{ route('task.toggle-complete', ['task' => $task->id]) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="btn">{{ $task->completed ? 'Mark Incomplete' : 'Mark Complete' }}</button>
+        </form>
+
+        <form action="{{ route('task.destroy', ['task' => $task->id]) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn">Delete</button>
+        </form>
+    </div>
+
 @endsection
